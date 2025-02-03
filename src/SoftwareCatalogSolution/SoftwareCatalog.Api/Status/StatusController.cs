@@ -8,6 +8,11 @@ public class StatusController : ControllerBase
     [HttpGet("/status")]
     public ActionResult GetTheStatus()
     {
-        return Ok();
+        // 
+        // this is fake...
+        var response = new StatusResponse(DateTimeOffset.Now, "Looks Good!");
+        return Ok(response);
     }
 }
+
+public record StatusResponse(DateTimeOffset LastChecked, String Message);
