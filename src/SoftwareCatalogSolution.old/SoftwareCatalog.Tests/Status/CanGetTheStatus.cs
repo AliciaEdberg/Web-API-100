@@ -1,6 +1,8 @@
 ﻿
 
 using Alba;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Time.Testing;
 using SoftwareCatalog.Api.Status;
 
 namespace SoftwareCatalog.Tests.Status;
@@ -11,9 +13,18 @@ public class CanGetTheStatus
     public async Task GetsA200WhenGettingTheStatus()
     {
         // Given
-        var expectedStatus = new StatusResponse(DateTimeOffset.Now, "Looks Good!");
+
+        var fakeDate = new DateTimeOffset(new DateTime(1969, 4, 20, 11, 59, 00));
+        var fakeTimeProvider = new FakeTimeProvider(fakeDate);
+        var expectedStatus = new StatusResponse(fakeDate, "Looks Good!");
         // This will start up our API, with our configuration (Program)
-        var host = await AlbaHost.For<Program>();
+        var host = await AlbaHost.For<Program>(config =>
+        {
+            config.ConfigureServices(services =>
+            {
+                services.AddSingleton<TimeProvider>(_ => fakeTimeProvider);
+            });
+        });
 
         var response = await host.Scenario(api =>
         {
@@ -21,7 +32,6 @@ public class CanGetTheStatus
             api.StatusCodeShouldBeOk();
 
         });
-
         var body = response.ReadAsJson<StatusResponse>();
         Assert.NotNull(body); // did we get a response?
 
@@ -30,3 +40,12 @@ public class CanGetTheStatus
 
     }
 }
+
+
+//public class FakeTestingTimeProvider : IProvideTheSystemTime
+//{
+//    public DateTimeOffset GetSystemTime()
+//    {
+//        return new DateTimeOffset(new DateTime(1969, 4, 20, 11, 59, 00));
+//    }
+//}
