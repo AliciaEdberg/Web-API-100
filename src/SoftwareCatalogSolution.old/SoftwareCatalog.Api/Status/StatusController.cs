@@ -18,4 +18,4 @@ public class StatusController : ControllerBase
 }
 
 
-public record StatusResponse(DateTimeOffset LastChecked, string Message);
+public record StatusResponse(DateTimeOffset LastChecked, String Message);
