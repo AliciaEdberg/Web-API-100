@@ -1,3 +1,5 @@
+using Marten;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -12,6 +14,16 @@ builder.Services.AddSwaggerGen();
 
 
 builder.Services.AddSingleton<TimeProvider>((_) => TimeProvider.System);
+
+var connectionString = builder.Configuration.GetConnectionString("database")
+    ?? throw new Exception("Yo need a connection string");
+
+
+builder.Services.AddMarten(config =>
+{
+    config.Connection(connectionString);
+}).UseLightweightSessions();
+
 var app = builder.Build(); // THE LINE IN THE SAND
 // Everything after this line is configuring how the web server handles incoming requests/responses
 // Configure the HTTP request pipeline.

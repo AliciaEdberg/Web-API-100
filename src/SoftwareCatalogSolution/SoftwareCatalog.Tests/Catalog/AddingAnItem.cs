@@ -15,23 +15,27 @@ public class AddingAnItem
         {
             Name = "Visual Studio Code"
         };
-        var expectedResponse = new CatalogItemResponseDetailsModel
-        {
-            Id = Guid.NewGuid(),
-            Name = itemToPost.Name,
-            Vendor = "Microsoft",
-            Licence = CatalogItemLicenceTypes.OpenSource
-        };
+
         var response = await host.Scenario(api =>
         {
             api.Post.Json(itemToPost).ToUrl("/vendors/microsoft/opensource");
             api.StatusCodeShouldBe(201);
         });
 
-        var body = response.ReadAsJson<CatalogItemResponseDetailsModel>();
-        Assert.NotNull(body);
+        var responseFromThePost = response.ReadAsJson<CatalogItemResponseDetailsModel>();
+        Assert.NotNull(responseFromThePost);
 
-        Assert.Equal(expectedResponse, body);
+        //   Assert.Equal(expectedResponse, body);
+
+        var getResponse = await host.Scenario(api =>
+        {
+            api.Get.Url($"/catalog/{responseFromThePost.Id}");
+        });
+
+        var responseFromGet = getResponse.ReadAsJson<CatalogItemResponseDetailsModel>();
+        Assert.NotNull(responseFromGet);
+
+        Assert.Equal(responseFromThePost, responseFromGet);
 
     }
 }
