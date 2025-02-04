@@ -29,19 +29,17 @@ public class UnitTest1
     [Fact]
     public void DoingThingsWithACustomer()
     {
-        var cust1 = new Customer()
+        var cust1 = new Customer(42, "Bob", 5000)
         {
-            Name = "Bob",
-            CreditLimit = 5000,
-            Id = 42
+
+            EmailAddress = "bob@aol.com"
         };
 
 
-        var cust2 = new Customer()
+        var cust2 = new Customer(42, "Bob", 5000)
         {
-            Name = "Bob",
-            CreditLimit = 5000,
-            Id = 42
+
+            EmailAddress = "bob@aol.com"
         };
 
         Assert.Equal(cust1, cust2);
@@ -64,11 +62,13 @@ public class UnitTest1
     }
 }
 
-public record Customer
+public record Customer(int Id, string Name, decimal CreditLimit)
 {
-    public required int Id { get; init; }
-    public required string Name { get; init; }
-    public required decimal CreditLimit { get; init; }
+    //public required int Id { get; init; }
+    //public required string Name { get; init; }
+    //public required decimal CreditLimit { get; init; }
 
     public string EmailAddress { get; init; } = string.Empty;
+
+
 }
