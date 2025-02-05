@@ -1,0 +1,46 @@
+# POST request to add a new vendor
+POST http://localhost:1337/vendors
+Content-Type: application/json
+
+{
+    "name": "Microsoft",
+    "websiteUrl": "https://www.microsoft.com"
+}
+
+###
+
+# POST request to add another vendor without a website URL
+POST http://localhost:1337/vendors
+Content-Type: application/json
+
+{
+    "name": "Amazon"
+}
+
+###
+
+# POST request with invalid vendor name (too short)
+POST http://localhost:1337/vendors
+Content-Type: application/json
+
+{
+    "name": "A",
+    "websiteUrl": "https://www.example.com"
+}
+
+###
+
+# POST request with invalid website URL (not HTTPS)
+POST http://localhost:1337/vendors
+Content-Type: application/json
+
+{
+    "name": "ValidName",
+    "websiteUrl": "http://www.example.com"
+}
+
+###
+
+# GET request to retrieve a vendor by ID
+# Replace {vendorId} with the actual ID of the vendor you want to retrieve
+GET http://localhost:1337/vendors/{vendorId}
