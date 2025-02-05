@@ -1,4 +1,5 @@
-﻿using Alba;
+﻿
+using Alba;
 using SoftwareCatalog.Api.Catalog;
 
 namespace SoftwareCatalog.Tests.Catalog;
